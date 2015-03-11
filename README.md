@@ -5,12 +5,12 @@ We provide here a sagemath implementation of the Integer formula encoding packag
 **UPDATE 2015-03-10** 
 
 The `Integer Formula encoding Package` is a symbolic hypermatrix package designed to
-investigate structural and combinatorial properties of hypermatrices.
+investigate structural and combinatorial properties of integer circuit encodings.
 
 # Installation 
 
 A properly working install of [sage](http://sagemath.org/) is a prerequisite to using the hypermatrix 
-package. Download the Hypermatrix sage file into your working directory. Load the hypermatrix package 
+package. Download the Hypermatrix sage file into your working directory. Load the package 
 into a sage terminal session using the following command:
 
 ```python
