@@ -43,6 +43,38 @@ we use the following instructions
 sage: FamPre(4)
 ['+1+1+11', '+1++111', '++11+11', '++1+111', '+++1111', '*+11+11']
 ```
+or
+```python
+sage: FamT(4)
+[['+', 1, ['+', 1, ['+', 1, 1]]],
+ ['+', 1, ['+', ['+', 1, 1], 1]],
+ ['+', ['+', 1, 1], ['+', 1, 1]],
+ ['+', ['+', 1, ['+', 1, 1]], 1],
+ ['+', ['+', ['+', 1, 1], 1], 1],
+ ['*', ['+', 1, 1], ['+', 1, 1]]]
+```
+
+Similarly to obtain the list of all formula encoding which use a comobination of addition,
+multiplication and exponentiation gate we use the follwoing instructions
+
+```python
+sage: FameT(4)
+[['+', 1, ['+', 1, ['+', 1, 1]]],
+ ['+', 1, ['+', ['+', 1, 1], 1]],
+ ['+', ['+', 1, 1], ['+', 1, 1]],
+ ['+', ['+', 1, ['+', 1, 1]], 1],
+ ['+', ['+', ['+', 1, 1], 1], 1],
+ ['*', ['+', 1, 1], ['+', 1, 1]],
+ ['^', ['+', 1, 1], ['+', 1, 1]]]
+```
+
+The package also allows for sampling uniformly formulas which evaluate to to a certain integer as follows:
+
+```python
+sage: RaFameT(7)
+['+', ['*', ['+', 1, 1], ['+', 1, ['+', 1, 1]]], 1]
+```
+
 
 To obtain the shortest formula encoding for an input integer we use the following instruction
 
