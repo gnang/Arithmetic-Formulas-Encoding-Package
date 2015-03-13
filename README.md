@@ -19,7 +19,32 @@ sage: %runfile("Arithmetic_Formulas_code.sage")
 
 # Usage
 
-To create a symbolic hypermatrix instance of size 2x3x4 for example, we use the instructions
+To obtain a list of all formula encodings which use only adition fanin 2 gates
+and which evaluate to an integer n, we use the following instructions.
+
+```python
+sage: FaT(4)
+[['+', 1, ['+', 1, ['+', 1, 1]]],
+ ['+', 1, ['+', ['+', 1, 1], 1]],
+ ['+', ['+', 1, 1], ['+', 1, 1]],
+ ['+', ['+', 1, ['+', 1, 1]], 1],
+ ['+', ['+', ['+', 1, 1], 1], 1]] 
+```
+To obtain the same list in prefix notation we use the following instructions
+
+```python
+sage: FaPre(4)
+['+1+1+11', '+1++111', '++11+11', '++1+111', '+++1111']
+```
+To obtain the formula encoding using a combination of addition and mulitplication gates,
+we use the following instructions
+
+```python
+sage: FamPre(4)
+['+1+1+11', '+1++111', '++11+11', '++1+111', '+++1111', '*+11+11']
+```
+
+To obtain the shortest formula encoding for an input integer we use the following instruction
 
 ```python
 sage: L = ShortestTame(6)
