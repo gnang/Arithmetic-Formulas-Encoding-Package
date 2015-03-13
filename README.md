@@ -19,7 +19,7 @@ sage: %runfile("Arithmetic_Formulas_code.sage")
 
 # Usage
 
-To obtain a list of all formula encodings which use only adition fanin 2 gates
+To obtain a list of all formula encodings which use only addition fanin 2 gates
 and which evaluate to an integer n, we use the following instructions.
 
 ```python
