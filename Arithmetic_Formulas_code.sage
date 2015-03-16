@@ -1895,8 +1895,8 @@ def Zeta(nbitr):
     the combinatorial tower sieve.
     ::
         sage: Zeta(2)
-        [[['+', 1, 1], ['+', 1, ['+', 1, 1]]],
-         [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
+        [[['+', 1, 1], ['+', 1, ['+', 1, 1]]], [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
+
     """
     x = var('x')
     
@@ -1959,9 +1959,9 @@ def ZetaT(nbitr):
     Implements an improved version of the zeta recurrence and
     the combinatorial tower sieve.
     ::
-        sage: ZetaT(2)
-        [[['+', 1, 1], ['+', 1, ['+', 1, 1]]],
-         [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
+        sage: ZetaT(1)
+        [[['+', 1, 1], ['+', 1, ['+', 1, 1]]], [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
+
     """
 
     # Pr corresponds to the initial list of primes
@@ -2016,6 +2016,14 @@ def ZetaT(nbitr):
     return [Pr,NuC]        
 
 def Horner(nbitr):
+    """
+    Produces expression associated with the recursive Horner 
+    encoding.
+    ::
+        sage: Horner(1) 
+        [1, x, x + 1, x^x, (x + 1)*x, (x + 1)*x^x, x^(x^x), x^(x + 1), x^x + 1]
+        
+    """
     x = var('x')
     Nk  = [1, x, 1+x, x^x]
     # Initialization of the lists
@@ -2036,6 +2044,14 @@ def Horner(nbitr):
     return Nk
 
 def HornerT(nbitr):
+    """
+    Produces trees associated with the recursive Horner 
+    encoding.
+    ::
+        sage: HornerT(1) 
+        [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]], ['*', ['+', 1, 1], ['+', 1, ['+', 1, 1]]], ['*', ['^', ['+', 1, 1], ['+', 1, 1]], ['+', 1, ['+', 1, 1]]], ['^', ['+', 1, 1], ['^', ['+', 1, 1], ['+', 1, 1]]], ['^', ['+', 1, 1], ['+', 1, ['+', 1, 1]]], ['+', 1, ['^', ['+', 1, 1], ['+', 1, 1]]]]
+        
+    """
     # Initial set
     Nk  = [ 1, ['+',1,1], ['+',1,['+',1,1]], ['^',['+',1,1],['+',1,1]] ]
     # Initialization of the lists

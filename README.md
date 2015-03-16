@@ -75,7 +75,6 @@ sage: RaFameT(7)
 ['+', ['*', ['+', 1, 1], ['+', 1, ['+', 1, 1]]], 1]
 ```
 
-
 To obtain the shortest formula encoding for an input integer we use the following instruction
 
 ```python
@@ -88,6 +87,29 @@ We evaluate the result for verification as follows
 ```python
 sage: EvalT(L[1]) 
 6
+```
+
+# Goodstein's recursion
+
+We describe here an asymptotically optimal algorithm for determining symbolic expressions
+which describe FCF integer formula-encoding for relatively large set of consecutive integers.
+Integer formula encodings obtain from the Goodstein's recursion are obtained from the package
+as follows. 
+```python
+sage: GoodsteinT(1)
+[1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]], ['+', 1, ['^', ['+', 1, 1], ['+', 1, 1]]], ['+', ['+', 1, 1], ['^', ['+', 1, 1], ['+', 1, 1]]], ['+', ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
+```
+
+# Zeta recursion
+
+The zeta recursion produces a list of formula encodings for the recursive prime encoding of integers.
+
+```python
+sage: [Pr, Nc]=ZetaT(1) 
+sage: Pr
+[['+', 1, 1], ['+', 1, ['+', 1, 1]]]
+sage: Nc
+[1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]
 ```
 
 # Bug report
