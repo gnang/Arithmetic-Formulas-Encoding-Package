@@ -1,5 +1,5 @@
 #*************************************************************************#
-#       Copyright (C) 2013 Edinah K. Gnang <gnang@Mathematx.com>          #
+#       Copyright (C) 2013 Edinah K. Gnang <kgnang@.gmail.com>            #
 #                                                                         #
 #  Distributed under the terms of the GNU General Public License (GPL)    #
 #                                                                         #
@@ -29,6 +29,7 @@ TODO:
 def T2Pre(expr):
     """
     Converts formula written in the bracket tree encoding to the Prefix string encoding notation
+    the symbol m will stand for the input -1
 
 
     EXAMPLES:
@@ -46,7 +47,7 @@ def T2Pre(expr):
 
     """
     s = str(expr)
-    return ((((s.replace("[","")).replace("]","")).replace(",","")).replace("'","")).replace(" ","")
+    return ((((s.replace("[","")).replace("]","")).replace(",","")).replace("'","")).replace(" ","").replace('-1','m')
 
 
 def T2P(expr):
@@ -69,7 +70,7 @@ def T2P(expr):
 
     """
     s = str(expr)
-    return ((((s.replace("[","")).replace("]","")).replace(",","")).replace("'","")).replace(" ","")[::-1]
+    return ((((s.replace("[","")).replace("]","")).replace(",","")).replace("'","")).replace(" ","")[::-1].replace('-1','m')
 
 
 def RollLD(L):
@@ -81,7 +82,7 @@ def RollLD(L):
     The tacitly assume that the input is a valid binary tree expression
     ::
         sage: RollLD([1, 2, 3])
-        '+11'
+        3
 
 
     AUTHORS:
@@ -208,7 +209,7 @@ def LopFaT(n):
     The input n must be greater than 0
     ::
         sage: LopFaT(3)
-        2
+        [['+', ['+', 1, 1], 1]]
 
 
     AUTHORS:
@@ -235,7 +236,7 @@ def LopCa(n):
     The input n must be greater than 0
     ::
         sage: LopCa(3)
-        ['+', ['+', 1, 1], 1]
+        1
 
 
     AUTHORS:
@@ -270,7 +271,7 @@ def RaFaT(n):
 
     """
     if n == 1:
-        return [1]
+        return 1
     else :
         # Rolling the Loaded Die.
         j = RollLD([Ca(i)*Ca(n-i) for i in range(1,n+1)])
@@ -285,7 +286,7 @@ def RaFaPre(n):
     The input n must be greater than 0
     ::
         sage: RaFaPre(3)
-        ['+', ['+', 1, 1], 1]
+        '+1+11'
 
 
     AUTHORS:
@@ -778,37 +779,7 @@ def FameTa(n):
     EXAMPLES:
     The input n must be greater than 0
     ::
-        sage: FameTa(6)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
-
-
-    AUTHORS:
-    - Edinah K. Gnang and Doron Zeilberger
-
-    To Do :
-    - Try to implement faster version of this procedure
-
-    """
-    if n == 1:
-        return [1]
-    else:
-        gu = []
-        for i in range(1,n):
-            gu = gu + [['+', g1, g2] for g1 in FameT(i) for g2 in FameT(n-i)]
-        return gu
-
-@cached_function
-def FameTaII(n):
-    """
-    The set of formula-binary trees only using addition,
-    multiplication, and exponentiation gates. The top gate
-    being an addition gate and and the formula evaluates to
-    the input integer n.
-
-    EXAMPLES:
-    The input n must be greater than 0
-    ::
-        sage: FameTaII(6)
+        sage: FameTa(3)
         [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
 
 
@@ -839,8 +810,11 @@ def FameTm(n):
     EXAMPLES:
     The input n must be greater than 0
     ::
-        sage: FameTm(3)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        sage: FameTm(6)
+        [['*', ['+', 1, 1], ['+', 1, ['+', 1, 1]]],
+         ['*', ['+', 1, 1], ['+', ['+', 1, 1], 1]],
+         ['*', ['+', 1, ['+', 1, 1]], ['+', 1, 1]],
+         ['*', ['+', ['+', 1, 1], 1], ['+', 1, 1]]]
 
 
     AUTHORS:
@@ -871,8 +845,8 @@ def FameTe(n):
     EXAMPLES:
     The input n must be greater than 0
     ::
-        sage: FameTe(3)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        sage: FameTe(4)
+        [['^', ['+', 1, 1], ['+', 1, 1]]]
 
 
     AUTHORS:
@@ -919,13 +893,13 @@ def FameT(n):
 @cached_function
 def Camea(n):
     """
-    Output the size of the set of formulas produced by the procedure FamTa(n).
+    Output the size of the set of formulas produced by the procedure FameTa(n).
 
     EXAMPLES:
     The input n must be greater than 0
     ::
         sage: Camea(6)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        54
 
 
     AUTHORS:
@@ -944,13 +918,13 @@ def Camea(n):
 @cached_function
 def Camem(n):
     """
-    Output the size of the set of formulas produced by the procedure FamTa(n).
+    Output the size of the set of formulas produced by the procedure FameTm(n).
 
     EXAMPLES:
     The input n must be greater than 0
     ::
-        sage: Camm(6)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        sage: Camem(6)
+        4
 
 
     AUTHORS:
@@ -966,13 +940,13 @@ def Camem(n):
 @cached_function
 def Camee(n):
     """
-    Output the size of the set of formulas produced by the procedure FamTa(n).
+    Output the size of the set of formulas produced by the procedure FameTe(n).
 
     EXAMPLES:
     The input n must be greater than 0
     ::
-        sage: Camee(6)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        sage: Camee(9)
+        2
 
 
     AUTHORS:
@@ -988,13 +962,16 @@ def Camee(n):
 @cached_function
 def Came(n):
     """
-    Output the size of the set of formulas produced by the procedure FamTa(n).
+    Output the size of the set of formulas produced by the procedure FameT(n).
+    Which counts all monotone formula encodings evaluating using a combination
+    of fanin two addition, multiplication and exponentiation gates which evaluates
+    to the input integer n
 
     EXAMPLES:
     The input n must be greater than 0
     ::
         sage: Came(6)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        58
 
 
     AUTHORS:
@@ -1045,7 +1022,7 @@ def RaFameTm(n):
     The input n must be greater than 0
     ::
         sage: RaFameT(9)
-        ['*', ['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        ['*', ['+', ['+', 1, 1], 1], ['+', ['+', 1, 1], 1]]
 
 
     AUTHORS:
@@ -1137,7 +1114,7 @@ def RaFameP(n):
     The input n must be greater than 0
     ::
         sage: RaFameP(6)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        '111+11+*1++'
 
 
     AUTHORS:
@@ -1160,7 +1137,7 @@ def RaFamePre(n):
     The input n must be greater than 0
     ::
         sage: RaFamePre(6)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        '*++111+11'
 
 
     AUTHORS:
@@ -1182,8 +1159,8 @@ def ShortestTame(n):
     EXAMPLES:
     The input n must be greater than 0
     ::
-        sage: Came(6)
-        [['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]]
+        sage: ShortestTame(2)
+        ['+', 1, 1]
 
 
     AUTHORS:
@@ -1253,7 +1230,6 @@ def get_permutation(la,lb):
             if la[i1] == lb[i2]:
                 L.append(i2)
                 break
-   
     return L
 
 def permute(l,p):
@@ -1273,11 +1249,9 @@ def permute(l,p):
     """
     # Initializing the output
     L = list()
-
     # Loop performing the evaluation.
     for i in range(len(l)):
         L.append(l[p[i]])
-   
     return L
 
 
@@ -1312,7 +1286,6 @@ def NaiveZetaT(nbit):
         perm = get_permutation(Vb, Va)
         # Reinitialization of the list Nk
         Nk = permute(L, perm)
-    
         # Set completion
         l = len(Nk)
         i = 0
@@ -1378,7 +1351,6 @@ def GoodsteinT(number_of_iterations=1):
     """
     # Initial condition of Initial set
     Ng0 = [1, ['+',1,1]]
-
     # Main loop performing the iteration
     for iteration in range(number_of_iterations):
         # Implementation of the set recurrence
@@ -1397,7 +1369,6 @@ def GoodsteinT(number_of_iterations=1):
                     T = ['+', T, Ng0[n[j]]]
                 Ng1.append(T)
         Ng0 = copy(Ng1)
-
     # Sorting the obtained list
     Nf = []
     for i in range(len(Ng0)):
@@ -1407,7 +1378,6 @@ def GoodsteinT(number_of_iterations=1):
     Ng0=[]
     for i in range(len(Nf)):
         Ng0.append(Nf[i][0])
-
     return Ng0
 
 
@@ -1513,10 +1483,8 @@ def base2expansion(n):
     elif n > 1:
         while k < n:
             k = k^2
-    
         if k == n:
             return x^(log(k,2))
-
         elif k > n:
             k = sqrt(k)
             while k < n:
@@ -1772,7 +1740,6 @@ def imprvdzetarecursion(nbitr):
     Ni = list(Ni+Rb[1:])
     if nbitr == 1:
         return [Ni, Pi, i] 
-
     for i in range(1, nbitr+1):
         print 'Iteration number '+str(i)
         Rb = []
@@ -1956,7 +1923,6 @@ def ZetaT(nbitr):
             Nu = [f for f in TpNu if (2^(log(lwr_bnd,2)+jtr)<EvalT(f) and EvalT(f)<=2^(log(lwr_bnd,2)+jtr+1))] 
 
             print '\nThe current iteration will uncover '+str(2^(N(log(lwr_bnd,2))+jtr+1)-2^(N(log(lwr_bnd,2))+jtr)-len(Nu))+' new primes in the range ['+str(2^(N(log(lwr_bnd,2))+jtr))+', '+str(2^(N(log(lwr_bnd,2))+jtr+1))+']'
-
             # Obtaining the corresponding sorted integer list
             la = [EvalT(f) for f in Nu]; lb = copy(la); lb.sort()
             # Obtaining the sorting permutation
@@ -2079,5 +2045,3 @@ def NonMonotoneFormula(n):
                 for i in range(1,sz):
                         A[sz]=A[sz]+[[o,s,t] for s in A[i] for t in A[sz-i-1] if (len(A[i])>0) and (len(A[sz-i-1])>0)]
         return A 
-
-
