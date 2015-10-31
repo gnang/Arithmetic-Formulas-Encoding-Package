@@ -1173,35 +1173,6 @@ def RaFamePre(n):
     return T2Pre(RaFameT(n))
 
 
-def EvalT(T):
-    """
-    Outputs the evaluation value of a tree.
-
-    EXAMPLES:
-    The input n must be greater than 0
-    ::
-        sage: EvalT([['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]])
-        6
-
-
-    AUTHORS:
-    - Edinah K. Gnang and Doron Zeilberger
-
-    To Do :
-    - Try to implement faster version of this procedure
-
-    """
-    if T == 1:
-        return 1
-    elif T[0] == '+':
-        return EvalT(T[1]) + EvalT(T[2])
-    elif T[0] == '*':
-        return EvalT(T[1]) * EvalT(T[2])
-    elif T[0] == '^':
-        return EvalT(T[1]) ^ EvalT(T[2])
-    else:
-        print 'IMPROPER INPUT !!!'
-
 @cached_function
 def ShortestTame(n):
     """
@@ -1895,8 +1866,8 @@ def Zeta(nbitr):
     the combinatorial tower sieve.
     ::
         sage: Zeta(2)
-        [[['+', 1, 1], ['+', 1, ['+', 1, 1]]], [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
-
+        [[['+', 1, 1], ['+', 1, ['+', 1, 1]]],
+         [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
     """
     x = var('x')
     
@@ -1959,9 +1930,9 @@ def ZetaT(nbitr):
     Implements an improved version of the zeta recurrence and
     the combinatorial tower sieve.
     ::
-        sage: ZetaT(1)
-        [[['+', 1, 1], ['+', 1, ['+', 1, 1]]], [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
-
+        sage: ZetaT(2)
+        [[['+', 1, 1], ['+', 1, ['+', 1, 1]]],
+         [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]]
     """
 
     # Pr corresponds to the initial list of primes
@@ -2016,14 +1987,6 @@ def ZetaT(nbitr):
     return [Pr,NuC]        
 
 def Horner(nbitr):
-    """
-    Produces expression associated with the recursive Horner 
-    encoding.
-    ::
-        sage: Horner(1) 
-        [1, x, x + 1, x^x, (x + 1)*x, (x + 1)*x^x, x^(x^x), x^(x + 1), x^x + 1]
-        
-    """
     x = var('x')
     Nk  = [1, x, 1+x, x^x]
     # Initialization of the lists
@@ -2044,14 +2007,6 @@ def Horner(nbitr):
     return Nk
 
 def HornerT(nbitr):
-    """
-    Produces trees associated with the recursive Horner 
-    encoding.
-    ::
-        sage: HornerT(1) 
-        [1, ['+', 1, 1], ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]], ['*', ['+', 1, 1], ['+', 1, ['+', 1, 1]]], ['*', ['^', ['+', 1, 1], ['+', 1, 1]], ['+', 1, ['+', 1, 1]]], ['^', ['+', 1, 1], ['^', ['+', 1, 1], ['+', 1, 1]]], ['^', ['+', 1, 1], ['+', 1, ['+', 1, 1]]], ['+', 1, ['^', ['+', 1, 1], ['+', 1, 1]]]]
-        
-    """
     # Initial set
     Nk  = [ 1, ['+',1,1], ['+',1,['+',1,1]], ['^',['+',1,1],['+',1,1]] ]
     # Initialization of the lists
@@ -2069,4 +2024,60 @@ def HornerT(nbitr):
         LEk = LEkp1
         LOk = LOkp1
         LPk = LPkp1
-    return Nk 
+    return Nk
+
+def EvalT(T):
+    """
+    Outputs the evaluation value of a tree.
+
+    EXAMPLES:
+    ::
+        sage: EvalT([['+', 1, ['+', 1, 1]], ['+', ['+', 1, 1], 1]])
+        6
+
+    AUTHORS:
+    - Edinah K. Gnang and Doron Zeilberger
+    """
+    if T == 1:
+        return 1
+    elif T == -1:
+        return -1
+    elif T[0] == '+':
+        return EvalT(T[1]) + EvalT(T[2])
+    elif T[0] == '*':
+        return EvalT(T[1]) * EvalT(T[2])
+    elif T[0] == '^':
+        return EvalT(T[1]) ^ EvalT(T[2])
+    else:
+        print 'IMPROPER INPUT !!!'
+
+def NonMonotoneFormula(n):
+    """
+    Outputs non-monotone formula encodings of length at most n.
+
+    EXAMPLES:
+    ::
+        sage: NonMontoneFormula(3)
+        [[], [1,-1], []]
+
+    AUTHORS:
+    - Edinah K. Gnang and Doron Zeilberger
+
+    To Do :
+    - Try to implement faster version of this procedure
+
+    """
+    if n<=3:
+        return [[], [1,-1], [], []]
+    elif n>3:
+        # Initialization of the list of formula.
+        A=[[], [1,-1]] + [[] for t in range(n-1)]
+        # Main loop.
+        for sz in range(3,n+1):
+            # Initialization of the fifth entry
+            for o in ['+', '*', '^']:
+                for i in range(1,sz):
+                        A[sz]=A[sz]+[[o,s,t] for s in A[i] for t in A[sz-i-1] if (len(A[i])>0) and (len(A[sz-i-1])>0)]
+        return A 
+
+
