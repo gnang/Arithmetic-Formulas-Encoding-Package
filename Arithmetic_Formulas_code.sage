@@ -102,7 +102,7 @@ def RollLD(L):
 @cached_function
 def FaT(n):
     """
-    The set of formula-binary trees only using addition gates
+    The list of formula-binary trees only using addition gates
     which evaluates to the input integer n.
 
     EXAMPLES:
@@ -131,7 +131,7 @@ def FaT(n):
 @cached_function
 def FaPre(n):
     """
-    The set of formula only using addition gates
+    The list of formula only using addition gates
     which evaluates to the input integer n in prefix notation.
 
     EXAMPLES:
@@ -154,7 +154,7 @@ def FaPre(n):
 @cached_function
 def FaP(n):
     """
-    The set of formula only using addition gates
+    The list of formula only using addition gates
     which evaluates to the input integer n in postfix notation.
 
     EXAMPLES:
@@ -437,7 +437,7 @@ def LopFaP(n):
 
 def FamTa(n):
     """
-    The set of formula-binary trees only using addition  and
+    The list of formula-binary trees only using addition  and
     multiplication gates with the top gate being an addition
     gate which evaluates to the input integer n.
 
@@ -467,7 +467,7 @@ def FamTa(n):
 @cached_function
 def FamTm(n):
     """
-    The set of formula-binary trees only using addition  and
+    The list of formula-binary trees only using addition  and
     multiplication gates with the top gate being a multiplication
     gate which evaluates to the input integer n.
 
@@ -497,7 +497,7 @@ def FamTm(n):
 
 def FamT(n):
     """
-    The set of formula-binary trees only using addition and
+    The list of formula-binary trees only using addition and
     multiplication gates.
 
     EXAMPLES:
@@ -771,7 +771,7 @@ def RaFamPre(n):
 @cached_function
 def FameTa(n):
     """
-    The set of formula-binary trees only using addition,
+    The list of formula-binary trees only using addition,
     multiplication, and exponentiation gates. The top gate
     being an addition gate and and the formula evaluates to
     the input integer n.
@@ -802,7 +802,7 @@ def FameTa(n):
 @cached_function
 def FameTm(n):
     """
-    The set of formula-binary trees only using addition.
+    The list of formula-binary trees only using addition.
     multiplication and exponentiation gates with the top
     gate being a multiplication gate which evaluates to the
     input integer n.
@@ -837,7 +837,7 @@ def FameTm(n):
 @cached_function
 def FameTe(n):
     """
-    The set of formula-binary trees only using addition.
+    The list of formula-binary trees only using addition.
     multiplication and exponentiation gates with the top
     gate being an exponetiation gate which evaluates to the
     input integer n.
@@ -869,7 +869,7 @@ def FameTe(n):
 @cached_function
 def FameT(n):
     """
-    The set of formula-binary trees only using addition.
+    The list of formula-binary trees only using addition.
     multiplication and exponentiation gates which evaluates to the
     input integer n.
 
@@ -1104,6 +1104,7 @@ def RaFameT(n):
         else :
             return RaFameTe(n)
 
+
 def RaFameP(n):
     """
     Outputs a uniformly randomly sample formula-binary tree written
@@ -1150,6 +1151,32 @@ def RaFamePre(n):
     return T2Pre(RaFameT(n))
 
 
+def Tsize(T):
+    """
+    Outputs the size of the Tree associated with the formula.
+ 
+    EXAMPLES:
+    
+    ::
+        sage: Tsize(['+', 1, 1])
+        3
+
+
+    AUTHORS:
+    - Edinah K. Gnang and Doron Zeilberger
+
+    To Do :
+    - Try to implement faster version of this procedure
+
+    """
+    if T==1:
+        return 1
+    elif T==-1:
+        return 1
+    else:
+        return 1+Tsize(T[1])+Tsize(T[2])
+
+
 @cached_function
 def ShortestTame(n):
     """
@@ -1184,7 +1211,6 @@ def ShortestTame(n):
                     aluf = ['+', T1[1], T2[1]]
                 else:
                     aluf = ['+', T2[1], T1[1]]
-
         for i in range(2,floor(n/2)):
             if mod(n,i)==0:
                 T1 = ShortestTame(i)
@@ -1195,7 +1221,6 @@ def ShortestTame(n):
                         aluf = ['*', T1[1], T2[1]]
                     else:
                         aluf = ['*', T2[1], T1[1]]
-
         for i in range(2,2+floor(log(n)/log(2))):
             if floor(n^(1/i)) == ceil(n^(1/i)):
                 T1 = ShortestTame(n^(1/i))
@@ -1204,6 +1229,31 @@ def ShortestTame(n):
                     si = T1[0]+T2[0]+1
                     aluf = ['^', T1[1], T2[1]]
         return [si, aluf]
+
+
+@cached_function
+def ShortestTameList(n):
+    """
+    Outputs the list of the smallest binary-tree
+    formula using addition, multiplication and exponentiation
+
+    EXAMPLES:
+    ::
+        sage: ShortestTameList(4)
+        [['+', 1, ['+', 1, ['+', 1, 1]]], ['+', 1, ['+', ['+', 1, 1], 1]], ['+', ['+', 1, 1], ['+', 1, 1]], ['+', ['+', 1, ['+', 1, 1]], 1], ['+', ['+', ['+', 1, 1], 1], 1], ['*', ['+', 1, 1], ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]
+
+
+    AUTHORS:
+    - Edinah K. Gnang
+
+    To Do :
+    - Try to implement faster version of this procedure
+
+    """
+    # Obtaining the minimal size
+    si=ShortestTame(n)[0]
+    return [f for f in FameT(n) if Tsize(f)==si]
+
 
 def get_permutation(la,lb):
     """
@@ -1231,6 +1281,7 @@ def get_permutation(la,lb):
                 L.append(i2)
                 break
     return L
+
 
 def permute(l,p):
     """
@@ -1298,6 +1349,7 @@ def NaiveZetaT(nbit):
                 i = i+1
     return [Pk, Nk]
 
+
 @cached_function
 def Goodstein(number_of_iterations=1):
     """
@@ -1341,13 +1393,7 @@ def GoodsteinT(number_of_iterations=1):
 
     ::
         sage: GoodsteinT(1)
-       [1,
-        ['+', 1, 1],
-        ['^', ['+', 1, 1], ['+', 1, 1]],
-        ['+', 1, ['+', 1, 1]],
-        ['+', 1, ['^', ['+', 1, 1], ['+', 1, 1]]],
-        ['+', ['+', 1, 1], ['^', ['+', 1, 1], ['+', 1, 1]]],
-        ['+', ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]] 
+       [1, ['+', 1, 1], ['^', ['+', 1, 1], ['+', 1, 1]], ['+', 1, ['+', 1, 1]], ['+', 1, ['^', ['+', 1, 1], ['+', 1, 1]]], ['+', ['+', 1, 1], ['^', ['+', 1, 1], ['+', 1, 1]]], ['+', ['+', 1, ['+', 1, 1]], ['^', ['+', 1, 1], ['+', 1, 1]]]] 
     """
     # Initial condition of Initial set
     Ng0 = [1, ['+',1,1]]
@@ -1397,11 +1443,9 @@ def list_eval(l):
     """
     # Initializing the output
     L = list()
-
     # Loop performing the evaluation.
     for i in range(len(l)):
         L.append(l[i].substitute(x=2))
-   
     return L
 
 
@@ -1430,8 +1474,8 @@ def get_permutation(la,lb):
             if la[i1] == lb[i2]:
                 L.append(i2)
                 break
-   
     return L
+
 
 def permute(l,p):
     """
@@ -1450,12 +1494,11 @@ def permute(l,p):
     """
     # Initializing the output
     L = list()
-
     # Loop performing the evaluation.
     for i in range(len(l)):
         L.append(l[p[i]])
-   
     return L
+
 
 @cached_function
 def base2expansion(n):
@@ -1494,6 +1537,7 @@ def base2expansion(n):
                 elif k > n:
                     p = x^(floor(log(k/2,2))) + base2expansion(n-k/2)
     return p
+
 
 @cached_function
 def base2expansionT(n):
@@ -1562,10 +1606,8 @@ def recurse_base2expansion(n):
     elif n > 1:
         while k < n:
             k = k^2
-    
         if k == n:
             return x^recurse_base2expansion(log(k,2))
-
         elif k > n:
             k = sqrt(k)
             while k < n:
@@ -1575,6 +1617,7 @@ def recurse_base2expansion(n):
                 elif k > n:
                     p = x^recurse_base2expansion(floor(log(k/2,2))) + recurse_base2expansion(n-k/2)
     return p
+
 
 @cached_function
 def recurse_base2expansionT(n):
@@ -1590,7 +1633,7 @@ def recurse_base2expansionT(n):
     
     ::
         sage: recurse_base2expansionT(2)
-        ['+',1,1]
+        ['+', 1, 1]
 
     AUTHORS:
     - Edinah K. Gnang
@@ -1776,7 +1819,7 @@ def imprvdzetarecursion(nbitr):
 @cached_function
 def Fa3T(n):
     """
-    The set of formula-binary trees only using fan-in three addition gates
+    The list of formula-binary trees only using fan-in three addition gates
     which evaluates to the input integer n.
 
     EXAMPLES:
