@@ -183,30 +183,30 @@ the sublists in the output above correspond to encodings of different lengths. I
 formulas which admits as subformulas division by zero we use the following code.
 
 ```python
-sage: sz=7  # Initializing the size parameter
-sage: Lt = NonMonotoneFormula(sz) # Initialization of the list of formulas
+sage: sz=11  # Initializing the size parameter
+sage: Lt =ReducedNonMonotoneFormula(sz) # Initialization of the list of formulas
 sage: Rslt=[]
 sage: for n in range(sz+1):
 ....:   L=[]; i=0
 ....:   while i<len(Lt[n]):
-....:       try:
-....:           EvalT(Lt[n][i])
-....:       except:
-....:           i=i+1
-....:       else:
-....:           L.append(Lt[n][i])
-....:           i=i+1
-....:   Rslt.append(Set([EvalT(L[i]) for i in range(len(L))]).list())
-....:
-sage: Rslt
-[[],
- [1, -1],
- [],
- [0, 1, 2, -2, -1],
- [],
- [0, 1, 2, 3, 1/2, -1, -1/2, -3, -2],
- [],
- [0, 1, 2, 3, 4, 1/4, 3/2, -2, 1/3, 1/2, -4, I, -3, -I, -1, -1/2, -1/3, -3/2]]
+....:       L.append(Lt[n][i]) 
+....:       i=i+1
+....:   Rslt.append(Set([EvalT(L[i]) for i in range(len(L))]))  
+sage: for i in range(1,len(Rslt)):
+....:   for j in range(i):
+....:       Rslt[i]=Rslt[i].difference(Rslt[j])
+{},
+ {1, -1},
+ {},
+ {2, -2},
+ {},
+ {3, -1/2, -3, 1/2},
+ {},
+ {-3/2, 4, I, 3/2, -1/3, 1/3, 1/4, -I, -4},
+ {},
+ {-5/2, sqrt(-2), 5, -4/3, -2/3, (-1)^(1/3), 5/2, 2/3, 4/3, -1/4, 5/4, -1/8, 1/8, 6, 1/9, 8, (-1)^(-I), -I - 1, -I + 1, -1/2*sqrt(-2), (-1)^I, I - 1, I + 1, -3/4, (-1)^(1/4), 9, sqrt(2), 1/2*sqrt(2), -8, -6, -5, -1},
+ {},
+ {-1/2*2^(2/3), (-1)^sqrt(-2), -7/3, sqrt(-2) - 1, (-1)^sqrt(2), 7, (-1)^(-1/2*sqrt(-2)), (-2)^(1/3), 10, -2*sqrt(-1/2), 2^(1/3), -sqrt(2), 5/3, 16, 7/3, -2/5, -1/5, 1/5, 2/5, 4/5, 1/4*sqrt(-2), -5/4, 27, -7/8, sqrt(2) - 1, (-1)^(1/3) - 1, -5/3, -8/9, (-1)^(1/8), (-2)^(3/2), -1/9, 2^(1/4), -1/3*sqrt(-3), 4/9, -7/4, 10/9, sqrt(-1/2), 2^(3/2), (-1)^((-1)^I), (-1)^(I - 1), (-2)^I, (-1)^(I + 1), -(-1)^(1/4), -(-1)^(-I), (-1)^((-1)^(1/4)), (-2)^(-I), 1/16, 1/2*I + 1/2, sqrt(-2) + 1, (-2)^(1/4), sqrt(-3), 1/2*sqrt(-2), sqrt(1/2), -27, (-1)^(-I) - 1, -I + 2, -(-1)^I, 7/2, (-1)^(1/4) - 1, (-1)^(5/4), -2*I, (-1)^I + 1, -1/27, 1/27, (-1)^I - 1, 2*I, 9/4, (-1)^(-I) + 1, 2^I, I - 2, -1/6, (-1)^((-1)^(-I)), (-1)^(-I - 1), -I - 2, (-1)^(-I + 1), 2^(-I), -1/2*I - 1/2, -1/2*I + 1/2, 3/4, 1/2*I - 1/2, (-1)^((-1)^(1/3)), I + 2, -sqrt(-2), -1/2*sqrt(-2) - 1, -9, -7, -9/8, 1/2*sqrt(2) - 1, -(-1)^(7/8), 2*sqrt(1/2), 1/4*sqrt(2), (-1)^(1/3) + 1, sqrt(2) + 1, -(-1)^(3/4), sqrt(3), 1/2*sqrt(2) + 1, 1/6, (-1)^(1/9), (-1)^(1/4) + 1, -1/2*sqrt(2), (-1)^(1/2*sqrt(2)), 9/8, -1/2*sqrt(-2) + 1, 1/3*sqrt(3), -(-1)^(1/3), 1/(-1), 1/2*2^(2/3), 7/8, -7/2}] 
 ```
 
 

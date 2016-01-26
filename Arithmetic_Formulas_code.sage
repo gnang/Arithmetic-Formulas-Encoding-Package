@@ -2278,6 +2278,37 @@ def EvalT(T):
     else:
         print 'IMPROPER INPUT !!!'
 
+def MonotoneFormula(n):
+    """
+    Outputs Monotone formula encodings of length at most n.
+
+    EXAMPLES:
+
+    ::
+
+        sage: MonotoneFormula(3)
+        [[], [1], [], []]
+
+    AUTHORS:
+    - Edinah K. Gnang and Doron Zeilberger
+
+    To Do :
+    - Try to implement faster version of this procedure
+
+    """
+    if n<=3:
+        return [[], [1], [], []]
+    elif n>3:
+        # Initialization of the list of formula.
+        A=[[], [1]] + [[] for t in range(n-1)]
+        # Main loop.
+        for sz in range(3,n+1):
+            # Initialization of the fifth entry
+            for o in ['+', '*', '^']:
+                for i in range(1,sz-1):
+                        A[sz]=A[sz]+[[o,s,t] for s in A[i] for t in A[sz-i-1] if (len(A[i])>0) and (len(A[sz-i-1])>0)]
+        return A 
+
 def NonMonotoneFormula(n):
     """
     Outputs non-monotone formula encodings of length at most n.
@@ -2305,6 +2336,40 @@ def NonMonotoneFormula(n):
         for sz in range(3,n+1):
             # Initialization of the fifth entry
             for o in ['+', '*', '^']:
-                for i in range(1,sz):
+                for i in range(1,sz-1):
                         A[sz]=A[sz]+[[o,s,t] for s in A[i] for t in A[sz-i-1] if (len(A[i])>0) and (len(A[sz-i-1])>0)]
-        return A 
+        return A
+
+def ReducedNonMonotoneFormula(n):
+    """
+    Outputs non-monotone formula encodings of length at most n.
+
+    EXAMPLES:
+
+    ::
+
+        sage: ReducedNonMonotoneFormula(3)
+        [[], [1, -1], [], []]
+
+    AUTHORS:
+    - Edinah K. Gnang and Doron Zeilberger
+
+    To Do :
+    - Try to implement faster version of this procedure
+
+    """
+    if n<=3:
+        return [[], [1,-1], [], []]
+    elif n>3:
+        # Initialization of the list of formula.
+        A=[[], [1,-1]] + [[] for t in range(n-1)]
+        # Main loop.
+        for sz in range(3,n+1):
+            # Initialization of the fifth entry
+            for i in range(1,sz-1):
+                A[sz]=A[sz]+[['+',s,t] for s in A[i] for t in A[sz-i-1] if (len(A[i])>0) and (len(A[sz-i-1])>0) and not EvalT(s).is_zero() and not EvalT(t).is_zero() and not EvalT(['+',s,t]).is_zero()]
+            for i in range(1,sz-1):
+                A[sz]=A[sz]+[['*',s,t] for s in A[i] for t in A[sz-i-1] if (len(A[i])>0) and (len(A[sz-i-1])>0) and EvalT(s)!=1 and EvalT(t)!=1 and EvalT(['*',s,t])!=1]
+            for i in range(1,sz-1):
+                A[sz]=A[sz]+[['^',s,t] for s in A[i] for t in A[sz-i-1] if (len(A[i])>0) and (len(A[sz-i-1])>0) and EvalT(s)!=1 and EvalT(t)!=1 and EvalT(['^',s,t])!=1]
+        return A
